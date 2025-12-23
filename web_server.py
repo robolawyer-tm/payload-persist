@@ -32,7 +32,7 @@ def login():
     if auth.check_auth(username, password):
         session['username'] = username
         session['password'] = password  # Store for backend operations
-        return jsonify({'success': True, 'username': username})
+        return jsonify({'success': True, 'username': username, 'password': password})
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
@@ -55,7 +55,7 @@ def register():
     if auth.save_auth(username, password):
         session['username'] = username
         session['password'] = password
-        return jsonify({'success': True, 'username': username})
+        return jsonify({'success': True, 'username': username, 'password': password})
     else:
         return jsonify({'error': 'Registration failed'}), 500
 
@@ -69,7 +69,11 @@ def logout():
 def check_auth_status():
     """Check if user is authenticated"""
     if 'username' in session:
-        return jsonify({'authenticated': True, 'username': session['username']})
+        return jsonify({
+            'authenticated': True, 
+            'username': session['username'],
+            'password': session.get('password')
+        })
     return jsonify({'authenticated': False})
 
 @app.route('/api/apps', methods=['GET'])

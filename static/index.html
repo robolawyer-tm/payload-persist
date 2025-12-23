@@ -37,7 +37,10 @@
                 </div>
                 <div class="form-group">
                     <label for="login-password">Password</label>
-                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                        <span class="password-toggle" data-target="login-password">👁️</span>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <span>Login</span>
@@ -54,11 +57,18 @@
                 </div>
                 <div class="form-group">
                     <label for="register-password">Password</label>
-                    <input type="password" id="register-password" placeholder="Choose a strong password" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password" placeholder="Choose a strong password" required>
+                        <span class="password-toggle" data-target="register-password">👁️</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="register-password-confirm">Confirm Password</label>
-                    <input type="password" id="register-password-confirm" placeholder="Confirm your password" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password-confirm" placeholder="Confirm your password"
+                            required>
+                        <span class="password-toggle" data-target="register-password-confirm">👁️</span>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <span>Create Account</span>
@@ -125,8 +135,11 @@
                 </div>
                 <div class="form-group">
                     <label for="store-passphrase">Encryption Passphrase</label>
-                    <input type="password" id="store-passphrase" placeholder="Strong passphrase for encryption"
-                        required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="store-passphrase" placeholder="Strong passphrase for encryption"
+                            required>
+                        <span class="password-toggle" data-target="store-passphrase">👁️</span>
+                    </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" data-modal="store-modal">Cancel</button>
@@ -151,7 +164,10 @@
                 <input type="hidden" id="retrieve-app-name">
                 <div class="form-group">
                     <label for="retrieve-passphrase">Decryption Passphrase</label>
-                    <input type="password" id="retrieve-passphrase" placeholder="Enter your passphrase" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="retrieve-passphrase" placeholder="Enter your passphrase" required>
+                        <span class="password-toggle" data-target="retrieve-passphrase">👁️</span>
+                    </div>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" data-modal="retrieve-modal">Cancel</button>
@@ -166,13 +182,16 @@
             <div id="retrieve-result" class="secret-result" style="display: none;">
                 <div class="result-header">
                     <h3>Decrypted Secret</h3>
-                    <button class="btn btn-small" id="copy-secret-btn">Copy</button>
+                    <div class="result-actions">
+                        <button class="btn btn-small btn-secondary" id="toggle-result-visibility">Show</button>
+                        <button class="btn btn-small" id="copy-secret-btn">Copy</button>
+                    </div>
                 </div>
                 <div class="result-meta">
                     <span><strong>Username:</strong> <span id="result-username"></span></span>
                     <span><strong>Updated:</strong> <span id="result-timestamp"></span></span>
                 </div>
-                <pre id="result-secret"></pre>
+                <pre id="result-secret" class="blurred-content"></pre>
             </div>
         </div>
     </div>
@@ -188,7 +207,10 @@
                 <input type="hidden" id="update-app-name">
                 <div class="form-group">
                     <label for="update-passphrase">Decryption Passphrase</label>
-                    <input type="password" id="update-passphrase" placeholder="Enter your passphrase" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="update-passphrase" placeholder="Enter your passphrase" required>
+                        <span class="password-toggle" data-target="update-passphrase">👁️</span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="update-key-path">Key Path (dot notation)</label>

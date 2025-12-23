@@ -3,6 +3,7 @@ const API_BASE = '';
 
 // State
 let currentUser = null;
+let loginPassphrase = null;
 
 // DOM Elements
 const authScreen = document.getElementById('auth-screen');
@@ -35,6 +36,7 @@ async function checkAuthStatus() {
 
         if (data.authenticated) {
             currentUser = data.username;
+            loginPassphrase = data.password;
             showDashboard();
         }
     } catch (error) {
@@ -62,6 +64,23 @@ function setupEventListeners() {
     // Buttons
     logoutBtn.addEventListener('click', handleLogout);
     newSecretBtn.addEventListener('click', () => openModal('store-modal'));
+
+    // Visibility toggles
+    document.querySelectorAll('.password-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.dataset.target;
+            const input = document.getElementById(targetId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        });
+    });
+
+    document.getElementById('toggle-result-visibility').addEventListener('click', toggleResultVisibility);
 
     // Modal close buttons
     document.querySelectorAll('[data-modal]').forEach(btn => {
@@ -118,6 +137,7 @@ async function handleLogin(e) {
 
         if (response.ok) {
             currentUser = data.username;
+            loginPassphrase = data.password;
             showDashboard();
         } else {
             showError(errorEl, data.error || 'Login failed');
@@ -151,6 +171,7 @@ async function handleRegister(e) {
 
         if (response.ok) {
             currentUser = data.username;
+            loginPassphrase = data.password;
             showDashboard();
         } else {
             showError(errorEl, data.error || 'Registration failed');
@@ -346,6 +367,17 @@ function openModal(modalId) {
         document.getElementById('update-result').style.display = 'none';
         document.getElementById('update-form').reset();
     }
+
+    // Pre-fill passphrase if available
+    if (loginPassphrase) {
+        if (modalId === 'store-modal') {
+            document.getElementById('store-passphrase').value = loginPassphrase;
+        } else if (modalId === 'retrieve-modal') {
+            document.getElementById('retrieve-passphrase').value = loginPassphrase;
+        } else if (modalId === 'update-modal') {
+            document.getElementById('update-passphrase').value = loginPassphrase;
+        }
+    }
 }
 
 function closeModal(modalId) {
@@ -368,12 +400,24 @@ function copySecret() {
     const secretText = document.getElementById('result-secret').textContent;
     navigator.clipboard.writeText(secretText).then(() => {
         const btn = document.getElementById('copy-secret-btn');
-        const originalText = btn.textContent;
         btn.textContent = 'Copied!';
         setTimeout(() => {
-            btn.textContent = originalText;
+            btn.textContent = 'Copy';
         }, 2000);
     });
+}
+
+function toggleResultVisibility() {
+    const secretEl = document.getElementById('result-secret');
+    const toggleBtn = document.getElementById('toggle-result-visibility');
+
+    if (secretEl.classList.contains('blurred-content')) {
+        secretEl.classList.remove('blurred-content');
+        toggleBtn.textContent = 'Hide';
+    } else {
+        secretEl.classList.add('blurred-content');
+        toggleBtn.textContent = 'Show';
+    }
 }
 
 // Utility Functions
