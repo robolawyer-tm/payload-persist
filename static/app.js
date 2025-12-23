@@ -321,7 +321,6 @@ async function handleUpdate(e) {
     const passphrase = document.getElementById('update-passphrase').value;
     const value = document.getElementById('update-value').value;
     const errorEl = document.getElementById('update-error');
-    const resultEl = document.getElementById('update-result');
 
     try {
         const response = await fetch(`${API_BASE}/api/secrets/update`, {
@@ -338,19 +337,13 @@ async function handleUpdate(e) {
         const data = await response.json();
 
         if (response.ok) {
-            document.getElementById('update-result-secret').textContent =
-                (typeof data.updated_secret === 'object') ?
-                    JSON.stringify(data.updated_secret, null, 2) : data.updated_secret;
-            resultEl.style.display = 'block';
-            errorEl.classList.remove('show');
+            closeModal('update-modal');
             loadApps(); // Refresh the list
         } else {
             showError(errorEl, data.error || 'Failed to update secret');
-            resultEl.style.display = 'none';
         }
     } catch (error) {
         showError(errorEl, 'Network error. Please try again.');
-        resultEl.style.display = 'none';
     }
 }
 
