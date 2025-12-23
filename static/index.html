@@ -213,13 +213,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="update-key-path">Key Path (dot notation)</label>
-                    <input type="text" id="update-key-path" placeholder="e.g., user.email or api.token" required>
-                    <small>Use dots to navigate nested objects: a.b.c</small>
-                </div>
-                <div class="form-group">
-                    <label for="update-value">New Value</label>
-                    <input type="text" id="update-value" placeholder="New value for this key" required>
+                    <label for="update-value">Edit Value</label>
+                    <textarea id="update-value" placeholder="Enter the new secret content" required
+                        style="min-height: 200px; width: 100%; padding: 10px; border-radius: 8px; background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace;"></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" data-modal="update-modal">Cancel</button>

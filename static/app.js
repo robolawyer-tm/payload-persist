@@ -319,7 +319,6 @@ async function handleUpdate(e) {
 
     const appName = document.getElementById('update-app-name').value;
     const passphrase = document.getElementById('update-passphrase').value;
-    const keyPath = document.getElementById('update-key-path').value;
     const value = document.getElementById('update-value').value;
     const errorEl = document.getElementById('update-error');
     const resultEl = document.getElementById('update-result');
@@ -331,7 +330,7 @@ async function handleUpdate(e) {
             body: JSON.stringify({
                 app_name: appName,
                 passphrase: passphrase,
-                key_path: keyPath,
+                key_path: "", // Send empty to trigger full overwrite
                 value: value
             })
         });
@@ -340,7 +339,8 @@ async function handleUpdate(e) {
 
         if (response.ok) {
             document.getElementById('update-result-secret').textContent =
-                JSON.stringify(data.updated_secret, null, 2);
+                (typeof data.updated_secret === 'object') ?
+                    JSON.stringify(data.updated_secret, null, 2) : data.updated_secret;
             resultEl.style.display = 'block';
             errorEl.classList.remove('show');
             loadApps(); // Refresh the list

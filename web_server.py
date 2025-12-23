@@ -191,7 +191,7 @@ def retrieve_secret():
 
 @app.route('/api/secrets/update', methods=['POST'])
 def update_secret():
-    """Deep update a secret using dot-notation path"""
+    """Update a secret by overwriting with a new value (or JSON object)"""
     if 'username' not in session:
         return jsonify({'error': 'Not authenticated'}), 401
     
@@ -201,7 +201,7 @@ def update_secret():
     key_path = data.get('key_path')
     value = data.get('value')
     
-    if not all([app_name, passphrase, key_path, value is not None]):
+    if not all([app_name, passphrase, value is not None]):
         return jsonify({'error': 'Missing required fields'}), 400
     
     username = session['username']
@@ -232,11 +232,20 @@ def update_secret():
             # Not JSON, wrap it
             secret_data = {'raw_content': current_json_str}
         
-        # 2. Apply deep update
-        utils.deep_update(secret_data, key_path, value)
+        # 2. Apply update (Full overwrite if no key_path)
+        if not key_path:
+            # Full overwrite
+            try:
+                secret_data = json.loads(value)
+            except (json.JSONDecodeError, TypeError):
+                secret_data = value
+        else:
+            # Apply deep update (backwards compatibility for non-polished clients)
+            utils.deep_update(secret_data, key_path, value)
         
         # 3. Re-encrypt and store
-        new_json_str = json.dumps(secret_data, indent=2)
+        new_json_str = json.dumps(secret_data, indent=2) if isinstance(secret_data, (dict, list)) else str(secret_data)
+        
         encrypted_data = crypto.encrypt_secret(new_json_str, passphrase)
         
         if not encrypted_data.ok:
