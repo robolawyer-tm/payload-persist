@@ -60,6 +60,7 @@ function setupEventListeners() {
     document.getElementById('store-form').addEventListener('submit', handleStore);
     document.getElementById('retrieve-form').addEventListener('submit', handleRetrieve);
     document.getElementById('update-form').addEventListener('submit', handleUpdate);
+    document.getElementById('unlock-edit-btn').addEventListener('click', handleUnlockEdit);
 
     // Buttons
     logoutBtn.addEventListener('click', handleLogout);
@@ -347,6 +348,44 @@ async function handleUpdate(e) {
     }
 }
 
+async function handleUnlockEdit() {
+    const appName = document.getElementById('update-app-name').value;
+    const passphrase = document.getElementById('update-passphrase').value;
+    const errorEl = document.getElementById('update-error');
+    const unlockSection = document.getElementById('update-unlock-section');
+    const editorSection = document.getElementById('update-editor-section');
+    const textarea = document.getElementById('update-value');
+
+    if (!passphrase) {
+        showError(errorEl, 'Passphrase required to unlock');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/api/secrets/retrieve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                app_name: appName,
+                passphrase: passphrase
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            textarea.value = data.secret;
+            unlockSection.style.display = 'none';
+            editorSection.style.display = 'block';
+            errorEl.classList.remove('show');
+        } else {
+            showError(errorEl, data.error || 'Failed to unlock secret');
+        }
+    } catch (error) {
+        showError(errorEl, 'Network error. Please try again.');
+    }
+}
+
 // Modal Management
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
@@ -385,6 +424,9 @@ function openRetrieveModal(appName) {
 
 function openUpdateModal(appName) {
     document.getElementById('update-app-name').value = appName;
+    document.getElementById('update-value').value = '';
+    document.getElementById('update-unlock-section').style.display = 'block';
+    document.getElementById('update-editor-section').style.display = 'none';
     openModal('update-modal');
 }
 
