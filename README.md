@@ -23,9 +23,9 @@ It consists of these components:
 
 ## 🔍 Please Audit
 
-- **Encryption Logic**: Check [`lib/secrecy.py`](lib/secrecy.py).
+- **Encryption Logic**: Check [`lib/crypto.py`](lib/crypto.py).
 - **Storage Logic**: Check [`lib/storage.py`](lib/storage.py).
-- **The Engine**: Check [`web_server.py`](web_server.py) or [`vivify.py`](vivify.py).
+- **Web Server**: Check [`web_server.py`](web_server.py).
 
 ---
 
@@ -34,7 +34,7 @@ It consists of these components:
 Copy and paste this into Termux to get started:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/JohnBlakesDad/payload-persist/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/JohnBlakesDad/payload-persist/secret-server/install.sh | bash
 ```
 
 Usage:
