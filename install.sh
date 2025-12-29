@@ -36,6 +36,10 @@ fi
 
 # 4. Install Python requirements
 echo "🐍 Step 4/5: Installing Python libraries..."
+if [ -n "$PREFIX" ]; then
+    export LDFLAGS="-L${PREFIX}/lib"
+    export CPPFLAGS="-I${PREFIX}/include"
+fi
 pip install -r requirements.txt
 
 # 5. Create command alias

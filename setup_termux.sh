@@ -15,6 +15,8 @@ pkg install python gnupg git -y
 # 3. Install the specific Python libraries your project needs
 # This reads requirements.txt and downloads the exact tools required
 echo "Step 3: Installing Python libraries..."
+export LDFLAGS="-L${PREFIX}/lib"
+export CPPFLAGS="-I${PREFIX}/include"
 pip install -r requirements.txt
 
 echo "---------------------------------------------------"
