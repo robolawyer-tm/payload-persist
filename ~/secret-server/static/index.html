@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Server - Secure Password Manager</title>
+    <link rel="stylesheet" href="/static/style.css?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="background-gradient"></div>
+
+    <!-- Login/Register Screen -->
+    <div id="auth-screen" class="screen active">
+        <div class="auth-container glass-card">
+            <div class="logo-section">
+                <div class="logo-icon">🔐</div>
+                <h1 class="app-title">Secret Server</h1>
+                <p class="app-subtitle">Encrypted Password Manager</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                        <span class="password-toggle" data-target="login-password">👁️</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span>Login</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                <div class="error-message" id="login-error"></div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password" placeholder="Choose a strong password" required>
+                        <span class="password-toggle" data-target="register-password">👁️</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password-confirm">Confirm Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="register-password-confirm" placeholder="Confirm your password"
+                            required>
+                        <span class="password-toggle" data-target="register-password-confirm">👁️</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span>Create Account</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                <div class="error-message" id="register-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboard-screen" class="screen">
+        <nav class="navbar glass-card">
+            <div class="nav-left">
+                <div class="logo-icon-small">🔐</div>
+                <h2 class="nav-title">Secret Server <span style="font-size: 0.7rem; opacity: 0.3;">v2-clean</span></h2>
+            </div>
+            <div class="nav-right">
+                <span class="username-display" id="username-display"></span>
+                <button class="btn btn-secondary" id="logout-btn">Logout</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Your Secrets</h1>
+                <button class="btn btn-primary" id="new-secret-btn">
+                    <span>+ New Secret</span>
+                </button>
+            </div>
+
+            <div class="apps-grid" id="apps-grid">
+                <!-- Apps will be loaded here -->
+            </div>
+
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">📦</div>
+                <h3>No secrets yet</h3>
+                <p>Create your first encrypted secret to get started</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Secret Modal -->
+    <div id="store-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Store New Secret</h2>
+                <button class="close-btn" data-modal="store-modal">←</button>
+            </div>
+            <form id="store-form">
+                <div class="form-group">
+                    <label for="store-app-name">App Name</label>
+                    <input type="text" id="store-app-name" placeholder="e.g., GitHub, Gmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="store-app-username">Username/Email (optional)</label>
+                    <input type="text" id="store-app-username" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="store-secret">Secret Data</label>
+                    <textarea id="store-secret" rows="4"
+                        placeholder='Enter secret (can be JSON, e.g., {"password": "abc123"})' required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="store-passphrase">Encryption Passphrase</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="store-passphrase" placeholder="Strong passphrase for encryption"
+                            required>
+                        <span class="password-toggle" data-target="store-passphrase">👁️</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="store-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span>Store Secret</span>
+                        <span class="btn-icon">🔒</span>
+                    </button>
+                </div>
+                <div class="error-message" id="store-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Retrieve Secret Modal -->
+    <div id="retrieve-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Retrieve Secret</h2>
+                <button class="close-btn" data-modal="retrieve-modal">←</button>
+            </div>
+            <form id="retrieve-form">
+                <input type="hidden" id="retrieve-app-name">
+                <div class="form-group">
+                    <label for="retrieve-passphrase">Decryption Passphrase</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="retrieve-passphrase" placeholder="Enter your passphrase" required>
+                        <span class="password-toggle" data-target="retrieve-passphrase">👁️</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="retrieve-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span>Decrypt & View</span>
+                        <span class="btn-icon">🔓</span>
+                    </button>
+                </div>
+                <div class="error-message" id="retrieve-error"></div>
+            </form>
+
+            <div id="retrieve-result" class="secret-result" style="display: none;">
+                <div class="result-header">
+                    <h3>Decrypted Secret</h3>
+                    <div class="result-actions">
+                        <button class="btn btn-small btn-secondary" id="toggle-result-visibility">Show</button>
+                        <button class="btn btn-small" id="copy-secret-btn">Copy</button>
+                    </div>
+                </div>
+                <div class="result-meta">
+                    <span><strong>Username:</strong> <span id="result-username"></span></span>
+                    <span><strong>Updated:</strong> <span id="result-timestamp"></span></span>
+                </div>
+                <pre id="result-secret" class="blurred-content"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Secret Modal -->
+    <div id="update-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Update Secret</h2>
+                <button class="close-btn" data-modal="update-modal">←</button>
+            </div>
+            <form id="update-form">
+                <input type="hidden" id="update-app-name">
+
+                <!-- Step 1: Unlock -->
+                <div id="update-unlock-section">
+                    <div class="form-group">
+                        <label for="update-passphrase">Decryption Passphrase</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="update-passphrase" placeholder="Enter your passphrase" required>
+                            <span class="password-toggle" data-target="update-passphrase">👁️</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="update-modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="unlock-edit-btn">
+                            <span>Unlock & Edit</span>
+                            <span class="btn-icon">🔓</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Edit (Hidden initially) -->
+                <div id="update-editor-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="update-value">Edit Value</label>
+                        <textarea id="update-value" placeholder="Loading current secret..." required
+                            style="min-height: 200px; width: 100%; padding: 10px; border-radius: 8px; background: rgba(0, 0, 0, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace;"></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" data-modal="update-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span>Save Changes</span>
+                            <span class="btn-icon">💾</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="error-message" id="update-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/app.js?v=5"></script>
+</body>
+
+</html>
